@@ -1,0 +1,13 @@
+<launch>
+	<param name="use_sim_time" value="true"/>
+	
+	<node pkg="rosbag" type="play" name="player" args="--clock $(env HOME)/rosbag/test.bag"/>
+
+	<node pkg="msg_downsampler" type="compressed_image_downsampler" name="compressed_image_downsampler" output="screen">
+		<remap from="/image_raw/compressed" to="/camera/color/image_raw/compressed"/>
+		<remap from="/camera_info" to="/camera/color/camera_info"/>
+		<param name="publish_hz" type="double" value="1"/>
+	</node>
+	
+	<node pkg="rviz" type="rviz" name="rviz" args="-d $(find msg_downsampler)/rviz_config/compressed_image_downsampler.rviz"/>
+</launch>
